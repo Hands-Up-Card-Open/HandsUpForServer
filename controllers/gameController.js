@@ -44,4 +44,26 @@ async function getGameResult(req,res){
     });
 }
 
-module.exports = {getGameResult}
+//OCR
+async function getOCRResult(req,res){
+  var post = req.body;
+  var img = post.base64;
+  let buf = Buffer.from(img, 'base64');
+
+  gameModel.ocrText(buf).then(function(result){
+      console.log(result);
+    });
+}
+
+//Label Detection
+async function getLabelResult(req,res){
+  var post = req.body;
+  var img = post.base64;
+  let buf = Buffer.from(img, 'base64');
+
+  gameModel.labelDetect(buf).then(function(result){
+      console.log(result);
+    });
+}
+
+module.exports = {getGameResult, getOCRResult, getLabelResult}

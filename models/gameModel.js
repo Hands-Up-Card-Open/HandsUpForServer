@@ -15,4 +15,32 @@ async function translateText(text, target) {
 
 }
 
-module.exports = {translateText}
+//API Key
+const vision = new google.ImageAnnotatorClient({
+  keyFilename: "./copper-sol-279910-540b407001cb.json",
+});
+
+//OCR
+async function ocrText(request) {
+  vision
+    .textDetection(request)
+    .then((results) => {
+      const texts = results[0].textAnnotations;
+
+      console.log("Text : ");
+      texts.forEach((text) => console.log(text.description));
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+      });
+}
+
+//Label Detction
+async function labelDetect(request) {
+  const [result] = await vision.labelDetection(request);
+  const labels = result.labelAnnotations;
+  console.log('Labels:');
+  labels.forEach(label => console.log(label.description));
+}
+
+module.exports = {translateText, ocrText, labelDetect}
